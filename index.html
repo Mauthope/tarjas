@@ -32,7 +32,7 @@
     <button type="submit">Atualizar Desenho</button>
   </form>
 
-  <svg id="desenho" width="400" height="600"></svg>
+  <svg id="desenho" width="500" height="600"></svg>
 
   <script>
     const form = document.getElementById('form');
@@ -47,34 +47,34 @@
       const fundo = +document.getElementById('fundo').value;
       const valvula = +document.getElementById('valvula').value;
 
-      const totalHeight = topo + corpo + fundo + 40;
+      const totalHeight = topo + corpo + fundo;
 
-      svg.setAttribute('width', largura + 100);
-      svg.setAttribute('height', totalHeight);
+      svg.setAttribute('width', largura + 120);
+      svg.setAttribute('height', totalHeight + 40);
+
+      const offsetX = 60;
+      const offsetY = 20;
 
       svg.innerHTML = `
-        <!-- Dobra topo esquerda -->
-        <polygon points="0,${topo} 20,${topo - 20} 20,${topo + 20}" fill="#e67e22"/>
-
-        <!-- Dobra topo direita -->
-        <polygon points="${largura + 40},${topo} ${largura + 20},${topo - 20} ${largura + 20},${topo + 20}" fill="#e67e22"/>
+        <!-- Dobras topo -->
+        <polygon points="${offsetX - 20},${offsetY} ${offsetX},${offsetY - 20} ${offsetX},${offsetY + topo + 20}" fill="#e67e22"/>
+        <polygon points="${offsetX + largura + 20},${offsetY} ${offsetX + largura},${offsetY - 20} ${offsetX + largura},${offsetY + topo + 20}" fill="#e67e22"/>
 
         <!-- Topo -->
-        <rect x="20" y="0" width="${largura - valvula}" height="${topo}" fill="white" stroke="#000" />
+        <rect x="${offsetX}" y="${offsetY}" width="${largura - valvula}" height="${topo}" fill="white" stroke="#000"/>
+        
         <!-- Válvula -->
-        <rect x="${20 + largura - valvula}" y="0" width="${valvula}" height="${topo}" fill="#5dade2" stroke="#000" />
+        <rect x="${offsetX + largura - valvula}" y="${offsetY}" width="${valvula}" height="${topo}" fill="#5dade2" stroke="#000" />
 
         <!-- Corpo -->
-        <rect x="20" y="${topo}" width="${largura}" height="${corpo}" fill="white" stroke="#000" />
+        <rect x="${offsetX}" y="${offsetY + topo}" width="${largura}" height="${corpo}" fill="white" stroke="#000"/>
 
         <!-- Fundo -->
-        <rect x="20" y="${topo + corpo}" width="${largura}" height="${fundo}" fill="white" stroke="#000" />
-        
-        <!-- Dobra fundo esquerda -->
-        <polygon points="0,${topo + corpo + fundo} 20,${topo + corpo + fundo - 20} 20,${topo + corpo + fundo + 20}" fill="#e67e22"/>
-        
-        <!-- Dobra fundo direita -->
-        <polygon points="${largura + 40},${topo + corpo + fundo} ${largura + 20},${topo + corpo + fundo - 20} ${largura + 20},${topo + corpo + fundo + 20}" fill="#e67e22"/>
+        <rect x="${offsetX}" y="${offsetY + topo + corpo}" width="${largura}" height="${fundo}" fill="white" stroke="#000"/>
+
+        <!-- Dobras fundo -->
+        <polygon points="${offsetX - 20},${offsetY + topo + corpo + fundo} ${offsetX},${offsetY + topo + corpo + fundo - 20} ${offsetX},${offsetY + topo + corpo + fundo + 20}" fill="#e67e22"/>
+        <polygon points="${offsetX + largura + 20},${offsetY + topo + corpo + fundo} ${offsetX + largura},${offsetY + topo + corpo + fundo - 20} ${offsetX + largura},${offsetY + topo + corpo + fundo + 20}" fill="#e67e22"/>
       `;
     });
 
