@@ -57,9 +57,13 @@
       const dimX = offsetX + largura + 30;
 
       svg.innerHTML = `
-        <!-- Topo -->
-        <rect x="${offsetX}" y="${offsetY}" width="${largura}" height="${topo}" fill="white" stroke="#000"/>
+        <!-- Retângulo do topo por baixo e mais largo -->
+        <rect x="${offsetX - triangleSize}" y="${offsetY}" width="${largura + triangleSize * 2}" height="${topo}" fill="white" stroke="#000"/>
+
+        <!-- Tarja topo -->
         <rect x="${offsetX}" y="${offsetY}" width="${largura - valvula}" height="${topo}" fill="white"/>
+
+        <!-- Válvula -->
         <rect x="${offsetX + largura - valvula}" y="${offsetY}" width="${valvula}" height="${topo}" fill="#5dade2" stroke="#000" />
 
         <!-- Corpo -->
@@ -68,7 +72,7 @@
         <!-- Fundo -->
         <rect x="${offsetX}" y="${offsetY + topo + corpo}" width="${largura}" height="${fundo}" fill="white" stroke="#000"/>
 
-        <!-- Dobras topo (triângulos invertidos) -->
+        <!-- Dobras topo (invertidas) -->
         <polygon points="
           ${offsetX},${offsetY} 
           ${offsetX - triangleSize},${offsetY + topo / 2} 
@@ -78,7 +82,7 @@
           ${offsetX + largura + triangleSize},${offsetY + topo / 2} 
           ${offsetX + largura},${offsetY + topo}" fill="#e67e22"/>
 
-        <!-- Dobras fundo (triângulos invertidos) -->
+        <!-- Dobras fundo (invertidas) -->
         <polygon points="
           ${offsetX},${offsetY + topo + corpo} 
           ${offsetX - triangleSize},${offsetY + topo + corpo + fundo / 2} 
@@ -88,7 +92,7 @@
           ${offsetX + largura + triangleSize},${offsetY + topo + corpo + fundo / 2} 
           ${offsetX + largura},${offsetY + topo + corpo + fundo}" fill="#e67e22"/>
 
-        <!-- Dimensões visuais -->
+        <!-- Dimensões -->
         <line x1="${offsetX}" y1="${offsetY - 10}" x2="${offsetX + largura}" y2="${offsetY - 10}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
         <text x="${offsetX + largura / 2}" y="${offsetY - 15}" text-anchor="middle" font-size="12">${largura} px</text>
 
