@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Editor de Embalagem</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 8px 0 4px;
+    }
+    svg {
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h2>Editor de Embalagem</h2>
+  <form id="form">
+    <label>Largura: <input type="number" id="largura" value="200"></label>
+    <label>Altura Corpo: <input type="number" id="corpo" value="300"></label>
+    <label>Altura Topo: <input type="number" id="topo" value="50"></label>
+    <label>Altura Fundo: <input type="number" id="fundo" value="50"></label>
+    <label>Largura Válvula: <input type="number" id="valvula" value="50"></label>
+    <button type="submit">Atualizar Desenho</button>
+  </form>
+
+  <svg id="desenho" width="400" height="600"></svg>
+
+  <script>
+    const form = document.getElementById('form');
+    const svg = document.getElementById('desenho');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const largura = +document.getElementById('largura').value;
+      const corpo = +document.getElementById('corpo').value;
+      const topo = +document.getElementById('topo').value;
+      const fundo = +document.getElementById('fundo').value;
+      const valvula = +document.getElementById('valvula').value;
+
+      const totalHeight = topo + corpo + fundo + 40;
+
+      svg.setAttribute('width', largura + 100);
+      svg.setAttribute('height', totalHeight);
+
+      svg.innerHTML = `
+        <!-- Dobra topo esquerda -->
+        <polygon points="0,${topo} 20,${topo - 20} 20,${topo + 20}" fill="#e67e22"/>
+
+        <!-- Dobra topo direita -->
+        <polygon points="${largura + 40},${topo} ${largura + 20},${topo - 20} ${largura + 20},${topo + 20}" fill="#e67e22"/>
+
+        <!-- Topo -->
+        <rect x="20" y="0" width="${largura - valvula}" height="${topo}" fill="white" stroke="#000" />
+        <!-- Válvula -->
+        <rect x="${20 + largura - valvula}" y="0" width="${valvula}" height="${topo}" fill="#5dade2" stroke="#000" />
+
+        <!-- Corpo -->
+        <rect x="20" y="${topo}" width="${largura}" height="${corpo}" fill="white" stroke="#000" />
+
+        <!-- Fundo -->
+        <rect x="20" y="${topo + corpo}" width="${largura}" height="${fundo}" fill="white" stroke="#000" />
+        
+        <!-- Dobra fundo esquerda -->
+        <polygon points="0,${topo + corpo + fundo} 20,${topo + corpo + fundo - 20} 20,${topo + corpo + fundo + 20}" fill="#e67e22"/>
+        
+        <!-- Dobra fundo direita -->
+        <polygon points="${largura + 40},${topo + corpo + fundo} ${largura + 20},${topo + corpo + fundo - 20} ${largura + 20},${topo + corpo + fundo + 20}" fill="#e67e22"/>
+      `;
+    });
+
+    form.dispatchEvent(new Event('submit'));
+  </script>
+</body>
+</html>
