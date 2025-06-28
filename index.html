@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Editor de Embalagem</title>
+  <title>Editor de Embalagem com Dimensões</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -48,22 +48,18 @@
       const valvula = +document.getElementById('valvula').value;
 
       const totalHeight = topo + corpo + fundo;
-
-      svg.setAttribute('width', largura + 120);
-      svg.setAttribute('height', totalHeight + 40);
+      svg.setAttribute('width', largura + 150);
+      svg.setAttribute('height', totalHeight + 60);
 
       const offsetX = 60;
-      const offsetY = 20;
+      const offsetY = 30;
+      const triangleWidth = 30;
+      const dimX = offsetX + largura + 30;
 
       svg.innerHTML = `
-        <!-- Dobras topo -->
-        <polygon points="${offsetX - 20},${offsetY} ${offsetX},${offsetY - 20} ${offsetX},${offsetY + topo + 20}" fill="#e67e22"/>
-        <polygon points="${offsetX + largura + 20},${offsetY} ${offsetX + largura},${offsetY - 20} ${offsetX + largura},${offsetY + topo + 20}" fill="#e67e22"/>
-
         <!-- Topo -->
-        <rect x="${offsetX}" y="${offsetY}" width="${largura - valvula}" height="${topo}" fill="white" stroke="#000"/>
-        
-        <!-- Válvula -->
+        <rect x="${offsetX}" y="${offsetY}" width="${largura}" height="${topo}" fill="white" stroke="#000"/>
+        <rect x="${offsetX}" y="${offsetY}" width="${largura - valvula}" height="${topo}" fill="white"/>
         <rect x="${offsetX + largura - valvula}" y="${offsetY}" width="${valvula}" height="${topo}" fill="#5dade2" stroke="#000" />
 
         <!-- Corpo -->
@@ -71,10 +67,37 @@
 
         <!-- Fundo -->
         <rect x="${offsetX}" y="${offsetY + topo + corpo}" width="${largura}" height="${fundo}" fill="white" stroke="#000"/>
+        <rect x="${offsetX}" y="${offsetY + topo + corpo}" width="${largura}" height="${fundo}" fill="white"/>
+
+        <!-- Dobras topo -->
+        <polygon points="${offsetX},${offsetY} ${offsetX + triangleWidth},${offsetY} ${offsetX},${offsetY + topo}" fill="#e67e22"/>
+        <polygon points="${offsetX + largura},${offsetY} ${offsetX + largura - triangleWidth},${offsetY} ${offsetX + largura},${offsetY + topo}" fill="#e67e22"/>
 
         <!-- Dobras fundo -->
-        <polygon points="${offsetX - 20},${offsetY + topo + corpo + fundo} ${offsetX},${offsetY + topo + corpo + fundo - 20} ${offsetX},${offsetY + topo + corpo + fundo + 20}" fill="#e67e22"/>
-        <polygon points="${offsetX + largura + 20},${offsetY + topo + corpo + fundo} ${offsetX + largura},${offsetY + topo + corpo + fundo - 20} ${offsetX + largura},${offsetY + topo + corpo + fundo + 20}" fill="#e67e22"/>
+        <polygon points="${offsetX},${offsetY + topo + corpo + fundo} ${offsetX + triangleWidth},${offsetY + topo + corpo + fundo} ${offsetX},${offsetY + topo + corpo}" fill="#e67e22"/>
+        <polygon points="${offsetX + largura},${offsetY + topo + corpo + fundo} ${offsetX + largura - triangleWidth},${offsetY + topo + corpo + fundo} ${offsetX + largura},${offsetY + topo + corpo}" fill="#e67e22"/>
+
+        <!-- Dimensão largura -->
+        <line x1="${offsetX}" y1="${offsetY - 10}" x2="${offsetX + largura}" y2="${offsetY - 10}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+        <text x="${offsetX + largura / 2}" y="${offsetY - 15}" text-anchor="middle" font-size="12">${largura} px</text>
+
+        <!-- Dimensão altura topo -->
+        <line x1="${dimX}" y1="${offsetY}" x2="${dimX}" y2="${offsetY + topo}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+        <text x="${dimX + 5}" y="${offsetY + topo / 2}" font-size="12">${topo} px</text>
+
+        <!-- Dimensão altura corpo -->
+        <line x1="${dimX}" y1="${offsetY + topo}" x2="${dimX}" y2="${offsetY + topo + corpo}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+        <text x="${dimX + 5}" y="${offsetY + topo + corpo / 2}" font-size="12">${corpo} px</text>
+
+        <!-- Dimensão altura fundo -->
+        <line x1="${dimX}" y1="${offsetY + topo + corpo}" x2="${dimX}" y2="${offsetY + topo + corpo + fundo}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+        <text x="${dimX + 5}" y="${offsetY + topo + corpo + fundo / 2}" font-size="12">${fundo} px</text>
+
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L10,5 L0,10 z" fill="black"/>
+          </marker>
+        </defs>
       `;
     });
 
