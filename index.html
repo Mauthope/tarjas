@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Editor de Embalagem com Dimensões</title>
+  <title>Editor de Embalagem com Corpo Geométrico</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -47,21 +47,23 @@
       const triangulo = +document.getElementById('triangulo').value;
       const valvula = +document.getElementById('valvula').value;
 
-      const corpoAltura = 200; // altura fixa visível entre os triângulos
       const offsetX = 60;
       const offsetY = 30;
-      const totalHeight = topo + corpoAltura + fundo + 2 * triangulo;
-      const dimX = offsetX + largura + 30;
+      const corpoY = offsetY + triangulo + topo / 2;
+      const corpoHeight = topo / 2 + fundo / 2 + 200; // 200 = altura interna arbitrária
+      const corpoX = offsetX - triangulo;
+      const corpoWidth = largura + triangulo * 2;
 
-      svg.setAttribute('width', largura + 150);
+      const totalHeight = triangulo + topo + corpoHeight + fundo / 2 + triangulo;
+
+      const dimX = corpoX + corpoWidth + 30;
+
+      svg.setAttribute('width', corpoX + corpoWidth + 100);
       svg.setAttribute('height', totalHeight + 60);
-
-      const corpoY = offsetY + triangulo + topo;
-      const corpoHeight = corpoAltura;
 
       svg.innerHTML = `
         <!-- Corpo (ao fundo) -->
-        <rect x="${offsetX}" y="${corpoY}" width="${largura}" height="${corpoHeight}" fill="#f2f2f2" stroke="#aaa" />
+        <rect x="${corpoX}" y="${corpoY}" width="${corpoWidth}" height="${corpoHeight}" fill="#f2f2f2" stroke="#aaa" />
 
         <!-- Topo -->
         <rect x="${offsetX}" y="${offsetY + triangulo}" width="${largura}" height="${topo}" fill="white" stroke="#000"/>
@@ -69,7 +71,7 @@
         <rect x="${offsetX + largura - valvula}" y="${offsetY + triangulo}" width="${valvula}" height="${topo}" fill="#5dade2" stroke="#000" />
 
         <!-- Fundo -->
-        <rect x="${offsetX}" y="${offsetY + triangulo + topo + corpoAltura}" width="${largura}" height="${fundo}" fill="white" stroke="#000"/>
+        <rect x="${offsetX}" y="${offsetY + triangulo + topo + corpoHeight}" width="${largura}" height="${fundo}" fill="white" stroke="#000"/>
 
         <!-- Dobras topo (triângulos invertidos) -->
         <polygon points="
@@ -83,26 +85,20 @@
 
         <!-- Dobras fundo (triângulos invertidos) -->
         <polygon points="
-          ${offsetX},${offsetY + triangulo + topo + corpoAltura} 
-          ${offsetX - triangulo},${offsetY + triangulo + topo + corpoAltura + fundo / 2} 
-          ${offsetX},${offsetY + triangulo + topo + corpoAltura + fundo}" fill="#e67e22"/>
+          ${offsetX},${offsetY + triangulo + topo + corpoHeight} 
+          ${offsetX - triangulo},${offsetY + triangulo + topo + corpoHeight + fundo / 2} 
+          ${offsetX},${offsetY + triangulo + topo + corpoHeight + fundo}" fill="#e67e22"/>
         <polygon points="
-          ${offsetX + largura},${offsetY + triangulo + topo + corpoAltura} 
-          ${offsetX + largura + triangulo},${offsetY + triangulo + topo + corpoAltura + fundo / 2} 
-          ${offsetX + largura},${offsetY + triangulo + topo + corpoAltura + fundo}" fill="#e67e22"/>
+          ${offsetX + largura},${offsetY + triangulo + topo + corpoHeight} 
+          ${offsetX + largura + triangulo},${offsetY + triangulo + topo + corpoHeight + fundo / 2} 
+          ${offsetX + largura},${offsetY + triangulo + topo + corpoHeight + fundo}" fill="#e67e22"/>
 
         <!-- Dimensões -->
-        <line x1="${offsetX}" y1="${offsetY}" x2="${offsetX + largura}" y2="${offsetY}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-        <text x="${offsetX + largura / 2}" y="${offsetY - 5}" text-anchor="middle" font-size="12">${largura} px</text>
-
-        <line x1="${dimX}" y1="${offsetY + triangulo}" x2="${dimX}" y2="${offsetY + triangulo + topo}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-        <text x="${dimX + 5}" y="${offsetY + triangulo + topo / 2}" font-size="12">${topo} px</text>
+        <line x1="${corpoX}" y1="${offsetY - 10}" x2="${corpoX + corpoWidth}" y2="${offsetY - 10}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+        <text x="${corpoX + corpoWidth / 2}" y="${offsetY - 15}" text-anchor="middle" font-size="12">${corpoWidth} px</text>
 
         <line x1="${dimX}" y1="${corpoY}" x2="${dimX}" y2="${corpoY + corpoHeight}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-        <text x="${dimX + 5}" y="${corpoY + corpoHeight / 2}" font-size="12">${corpoAltura} px</text>
-
-        <line x1="${dimX}" y1="${offsetY + triangulo + topo + corpoAltura}" x2="${dimX}" y2="${offsetY + triangulo + topo + corpoAltura + fundo}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-        <text x="${dimX + 5}" y="${offsetY + triangulo + topo + corpoAltura + fundo / 2}" font-size="12">${fundo} px</text>
+        <text x="${dimX + 5}" y="${corpoY + corpoHeight / 2}" font-size="12">${corpoHeight} px</text>
 
         <defs>
           <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto" markerUnits="strokeWidth">
