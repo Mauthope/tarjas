@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Editor de Embalagem com Corpo Geométrico Correto</title>
+  <title>Editor de Embalagem com Altura Ajustável</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -28,6 +28,7 @@
     <label>Altura Topo: <input type="number" id="topo" value="50"></label>
     <label>Altura Fundo: <input type="number" id="fundo" value="50"></label>
     <label>Altura Triângulo: <input type="number" id="triangulo" value="30"></label>
+    <label>Altura Corpo: <input type="number" id="corpo" value="200"></label>
     <label>Largura Válvula: <input type="number" id="valvula" value="50"></label>
     <button type="submit">Atualizar Desenho</button>
   </form>
@@ -45,21 +46,20 @@
       const topo = +document.getElementById('topo').value;
       const fundo = +document.getElementById('fundo').value;
       const triangulo = +document.getElementById('triangulo').value;
+      const corpoAltura = +document.getElementById('corpo').value;
       const valvula = +document.getElementById('valvula').value;
 
       const offsetX = 60;
       const offsetY = 30;
 
+      // Corpo
       const corpoX = offsetX - triangulo;
       const corpoWidth = largura + 2 * triangulo;
-      const corpoY = offsetY + triangulo + topo / 2;
-      const corpoHeight = triangulo + 200 + triangulo; // pode ser fixo ou recalculado
-
-      const totalHeight = topo + fundo + corpoHeight + triangulo;
-
-      const fundoY = corpoY + corpoHeight - fundo / 2;
       const topoY = offsetY + triangulo;
+      const corpoY = topoY + topo / 2;
+      const fundoY = corpoY + corpoAltura - fundo / 2;
 
+      const totalHeight = fundoY + fundo + triangulo;
       const dimX = corpoX + corpoWidth + 30;
 
       svg.setAttribute('width', corpoX + corpoWidth + 100);
@@ -67,7 +67,7 @@
 
       svg.innerHTML = `
         <!-- Corpo -->
-        <rect x="${corpoX}" y="${corpoY}" width="${corpoWidth}" height="${corpoHeight}" fill="#f2f2f2" stroke="#aaa" />
+        <rect x="${corpoX}" y="${corpoY}" width="${corpoWidth}" height="${corpoAltura}" fill="#f2f2f2" stroke="#aaa" />
 
         <!-- Topo -->
         <rect x="${offsetX}" y="${topoY}" width="${largura}" height="${topo}" fill="white" stroke="#000"/>
@@ -101,8 +101,8 @@
         <line x1="${corpoX}" y1="${offsetY - 10}" x2="${corpoX + corpoWidth}" y2="${offsetY - 10}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
         <text x="${corpoX + corpoWidth / 2}" y="${offsetY - 15}" text-anchor="middle" font-size="12">${corpoWidth} px</text>
 
-        <line x1="${dimX}" y1="${corpoY}" x2="${dimX}" y2="${corpoY + corpoHeight}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-        <text x="${dimX + 5}" y="${corpoY + corpoHeight / 2}" font-size="12">${corpoHeight} px</text>
+        <line x1="${dimX}" y1="${corpoY}" x2="${dimX}" y2="${corpoY + corpoAltura}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+        <text x="${dimX + 5}" y="${corpoY + corpoAltura / 2}" font-size="12">${corpoAltura} px</text>
 
         <defs>
           <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto" markerUnits="strokeWidth">
