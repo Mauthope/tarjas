@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Editor de Embalagem com Altura Ajustável</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor de Embalagem em cm</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -22,18 +22,18 @@
   </style>
 </head>
 <body>
-  <h2>Editor de Embalagem</h2>
+  <h2>Editor de Embalagem (cm)</h2>
   <form id="form">
-    <label>Largura: <input type="number" id="largura" value="200"></label>
-    <label>Altura Topo: <input type="number" id="topo" value="50"></label>
-    <label>Altura Fundo: <input type="number" id="fundo" value="50"></label>
-    <label>Altura Triângulo: <input type="number" id="triangulo" value="30"></label>
-    <label>Altura Corpo: <input type="number" id="corpo" value="200"></label>
-    <label>Largura Válvula: <input type="number" id="valvula" value="50"></label>
+    <label>Largura (cm): <input type="number" id="largura" value="20" step="0.1"></label>
+    <label>Altura Topo (cm): <input type="number" id="topo" value="5" step="0.1"></label>
+    <label>Altura Fundo (cm): <input type="number" id="fundo" value="5" step="0.1"></label>
+    <label>Altura Triângulo (cm): <input type="number" id="triangulo" value="3" step="0.1"></label>
+    <label>Altura Corpo (cm): <input type="number" id="corpo" value="20" step="0.1"></label>
+    <label>Largura Válvula (cm): <input type="number" id="valvula" value="5" step="0.1"></label>
     <button type="submit">Atualizar Desenho</button>
   </form>
 
-  <svg id="desenho" width="500" height="700"></svg>
+  <svg id="desenho" width="800" height="800"></svg>
 
   <script>
     const form = document.getElementById('form');
@@ -42,17 +42,27 @@
     form.addEventListener('submit', e => {
       e.preventDefault();
 
-      const largura = +document.getElementById('largura').value;
-      const topo = +document.getElementById('topo').value;
-      const fundo = +document.getElementById('fundo').value;
-      const triangulo = +document.getElementById('triangulo').value;
-      const corpoAltura = +document.getElementById('corpo').value;
-      const valvula = +document.getElementById('valvula').value;
+      const CM_TO_PX = 37.8;
+
+      // Entradas do usuário em cm
+      const larguraCM = +document.getElementById('largura').value;
+      const topoCM = +document.getElementById('topo').value;
+      const fundoCM = +document.getElementById('fundo').value;
+      const trianguloCM = +document.getElementById('triangulo').value;
+      const corpoCM = +document.getElementById('corpo').value;
+      const valvulaCM = +document.getElementById('valvula').value;
+
+      // Conversão para px
+      const largura = larguraCM * CM_TO_PX;
+      const topo = topoCM * CM_TO_PX;
+      const fundo = fundoCM * CM_TO_PX;
+      const triangulo = trianguloCM * CM_TO_PX;
+      const corpoAltura = corpoCM * CM_TO_PX;
+      const valvula = valvulaCM * CM_TO_PX;
 
       const offsetX = 60;
       const offsetY = 30;
 
-      // Corpo
       const corpoX = offsetX - triangulo;
       const corpoWidth = largura + 2 * triangulo;
       const topoY = offsetY + triangulo;
@@ -99,10 +109,10 @@
 
         <!-- Dimensões -->
         <line x1="${corpoX}" y1="${offsetY - 10}" x2="${corpoX + corpoWidth}" y2="${offsetY - 10}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-        <text x="${corpoX + corpoWidth / 2}" y="${offsetY - 15}" text-anchor="middle" font-size="12">${corpoWidth} px</text>
+        <text x="${corpoX + corpoWidth / 2}" y="${offsetY - 15}" text-anchor="middle" font-size="12">${larguraCM + (2 * trianguloCM)} cm</text>
 
         <line x1="${dimX}" y1="${corpoY}" x2="${dimX}" y2="${corpoY + corpoAltura}" stroke="black" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-        <text x="${dimX + 5}" y="${corpoY + corpoAltura / 2}" font-size="12">${corpoAltura} px</text>
+        <text x="${dimX + 5}" y="${corpoY + corpoAltura / 2}" font-size="12">${corpoCM} cm</text>
 
         <defs>
           <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto" markerUnits="strokeWidth">
